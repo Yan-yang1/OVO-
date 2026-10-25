@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>OVO聊天</title>
+  <!-- 极简 SVG 图标（约200字节），替代原先约10KB的base64 PNG，显著减小首字节体积 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231e80ff'/%3E%3Cpath d='M20 32v26a6 6 0 0 0 6 6h22l10 11 4-11h12a6 6 0 0 0 6-6V32a6 6 0 0 0-6-6H26a6 6 0 0 0-6 6z' fill='white'/%3E%3C/svg%3E">
+  <!-- 提前完成目标域名的 DNS / TCP / TLS 握手，iframe 真正请求时省去 1~3 次网络往返 -->
+  <link rel="preconnect" href="https://4m7edb745dsku.doubao.link">
+  <link rel="dns-prefetch" href="https://4m7edb745dsku.doubao.link">
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: #fff;
+      font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    #app-frame {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh; /* 手机浏览器动态地址栏适配 */
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+    /* 首屏加载提示，加载完成后淡出 */
+    #loading {
+      position: fixed; inset: 0; z-index: 998;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      color: #888; font-size: 14px;
+      transition: opacity .15s ease;
+      pointer-events: none;
+      opacity: 1;
+    }
+    #loading.hide { opacity: 0; }
+  </style>
+</head>
+<body>
+  <!-- fetchpriority=high：让浏览器优先发起并加载该 iframe 资源 -->
+  <iframe id="app-frame" fetchpriority="high"
+          allow="clipboard-write; encrypted-media; fullscreen; geolocation; microphone; camera"></iframe>
+
+  <div id="loading">加载中…</div>
+
+  <script>
+    (function () {
+      "use strict";
+      var loading = document.getElementById("loading");
+      var hideTimer = null;
+
+      function hideLoading() {
+        if (hideTimer) { clearTimeout(hideTimer); }
+        // load 后立即淡出，不再额外等待，减少白屏滞留
+        hideTimer = setTimeout(function () { loading.classList.add("hide"); }, 0);
+      }
+      // 兜底：若 iframe 长时间未触发 load，提前隐藏遮罩，避免一直遮挡
+      setTimeout(hideLoading, 2500);
+
+      var _a = "aHR0cHM6Ly80bTdlZGI3NDVkc2t1LmRvdWJh";
+      var _b = "by5saW5rL2FwcC9hcHBfMTdmc3VjN3o3YmI=";
+      try {
+        var frame = document.getElementById("app-frame");
+        frame.src = atob(_a + _b);
+        frame.addEventListener("load", hideLoading);
+      } catch (e) {
+        hideLoading();
+      }
+    })();
+  </script>
+</body>
+</html>
